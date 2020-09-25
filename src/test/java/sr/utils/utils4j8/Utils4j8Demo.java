@@ -20,9 +20,30 @@ public class Utils4j8Demo {
 
 	public static void main(String[] args) {
 
-		System.out.println(Optional.ofNullable("string")//
-				.map(safeCast(Person.class))//
-				.orElse(new Person().setName("NewPerson")));
+		
+		// Method  : safeCast 
+		// Usecase : Cast an object into another type, with a prior instanceOf check
+
+		// Verbose code looks like:
+
+		System.out.println(//
+				Optional.ofNullable("NewPerson")//
+						.filter(Person.class::isInstance)//
+						.map(Person.class::cast)//
+						.orElse(new Person("NewPerson"))//
+		);
+
+		// With safeCast method, it becomes one liner and less verbose as follows
+		// keeping the output exactly same.
+
+		System.out.println(//
+				Optional.ofNullable("NewPerson")//
+						.map(safeCast(Person.class))//
+						.orElse(new Person("NewPerson"))//
+		);
+		
+		
+		
 
 		List<Person> persons = getSamplePersonList();
 
@@ -97,6 +118,14 @@ public class Utils4j8Demo {
 
 		private String name;
 		private Address address;
+
+		public Person() {
+
+		}
+
+		public Person(String name) {
+			this.name = name;
+		}
 
 		public String getName() {
 			return name;

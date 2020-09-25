@@ -19,6 +19,20 @@ import sr.utils.utils4j8.core.CoreUtils;
 // TODO : verbose documentation of each method
 public final class Utils4j8 {
 
+	/**
+	 * Get a function which cast an object into another type, with a prior
+	 * isInstance check
+	 * 
+	 * 
+	 * @param <F>   type of the object input to the function
+	 * @param <T>   target class type
+	 * @param clazz
+	 * @return casting function which returns <br>
+	 *         casted object if it is an instance of provided clazz <br>
+	 *         null if object is not instance of provided clazz
+	 * 
+	 * 
+	 */
 	public static <F, T> Function<F, T> safeCast(Class<T> clazz) {
 		return value -> Optional.ofNullable(value)//
 				.filter(clazz::isInstance)//
@@ -28,16 +42,38 @@ public final class Utils4j8 {
 
 	// map/filter utilities
 
+	/**
+	 * 
+	 * Get a function which retrieves an element in a list at provided index value
+	 * 
+	 * @param <E>   Type of the list input to the function
+	 * @param index
+	 * @return a function which takes input as list and returns <br>
+	 *         element at provided 'index', <br>
+	 *         null if the 'index' >= list.size
+	 */
+	public static <E> Function<? super List<E>, ? extends E> valueAt(final int index) {
+		return list -> index < list.size() ? list.get(index) : null;
+	}
+
+
+	/**
+	 * 
+	 * Get a predicate which tests if a provided key is present in the input map
+	 * 
+	 * @param <K> Type of map key
+	 * @param <V> Type of map value
+	 * @param key
+	 * @return a predicate which takes input as map and returns if the provided key
+	 *         is present in the map
+	 * 
+	 */
 	public static <K, V> Predicate<? super Map<K, V>> contains(final K key) {
 		return map -> map.containsKey(key);
 	}
 
 	public static <K, V> Function<? super Map<K, V>, ? extends V> valueOf(final K key) {
 		return map -> map.get(key);
-	}
-
-	public static <E> Function<? super List<E>, ? extends E> valueAt(final int index) {
-		return list -> index < list.size() ? list.get(index) : null;
 	}
 
 	// Predicates utilities
@@ -79,7 +115,7 @@ public final class Utils4j8 {
 		return new FunctionContainer<T, R>(function)//
 				.onNull(onNullConsumer);
 	}
-	
+
 	public static <T, R> FunctionContainer<T, R> onNullSwitchTo(//
 			final Function<T, R> function, //
 			final R another//
@@ -87,7 +123,7 @@ public final class Utils4j8 {
 		return new FunctionContainer<T, R>(function)//
 				.onNullSwitchTo(another);
 	}
-	
+
 	public static <T, R> FunctionContainer<T, R> onNullSwitchTo(//
 			final Function<T, R> function, //
 			final Supplier<R> anotherSupplier//
@@ -137,6 +173,6 @@ public final class Utils4j8 {
 	// TODO : iterating over map to get different structures
 	// TODO : asserter
 	// TODO : distinct by field
-	// TODO : tuples 
+	// TODO : tuples
 
 }
